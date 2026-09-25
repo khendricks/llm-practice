@@ -23,6 +23,7 @@ dimension is the number of tokens in each example.
 
 from torch.utils.data import DataLoader
 
+from src.config import MAX_SEQUENCE_LENGTH
 from src.datasets.dataset_v1 import DatasetV1
 from src.tokenizers.byte_pair_v1 import BytePairTokenizerV1
 
@@ -34,7 +35,7 @@ class DataLoaderV1(DataLoader):
         self,
         text: str,
         batch_size: int,
-        max_length: int = 256,
+        max_length: int = MAX_SEQUENCE_LENGTH,
         stride: int = 128,
         shuffle: bool = True,
         drop_last: bool = True,

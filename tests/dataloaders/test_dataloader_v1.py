@@ -1,6 +1,7 @@
 """Tests for the GPT data loader."""
 
 from src.dataloaders.dataloader_v1 import DataLoaderV1
+from src.config import MAX_SEQUENCE_LENGTH
 
 
 def test_dataloader_returns_batched_input_target_pairs() -> None:
@@ -44,3 +45,16 @@ def test_dataloader_keeps_incomplete_batch_when_requested() -> None:
     assert len(batches) == 2
     assert batches[0][0].shape == (2, 3)
     assert batches[1][0].shape == (1, 3)
+
+
+def test_dataloader_uses_the_shared_sequence_length_by_default() -> None:
+    """Keep the default training window aligned with model positions."""
+    dataloader = DataLoaderV1(
+        "hello " * (MAX_SEQUENCE_LENGTH + 2),
+        batch_size=1,
+        shuffle=False,
+    )
+
+    input_batch, _ = next(iter(dataloader))
+
+    assert input_batch.shape == (1, MAX_SEQUENCE_LENGTH)
