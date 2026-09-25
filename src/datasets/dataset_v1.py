@@ -1,4 +1,4 @@
-"""Prepare practice examples for teaching GPT to predict what comes next.
+"""Prepare next-token practice examples for teaching a GPT.
 
 Before a model can learn from text, the text is converted into token IDs:
 numbers that represent pieces of text. This module takes one long list of
@@ -27,7 +27,7 @@ from torch.utils.data import Dataset
 from src.tokenizers.byte_pair_v1 import BytePairTokenizerV1
 
 
-class GPTDatasetV1(Dataset):
+class DatasetV1(Dataset):
     """Create overlapping input and target token sequences from text."""
 
     def __init__(

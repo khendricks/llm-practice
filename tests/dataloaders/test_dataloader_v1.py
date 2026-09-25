@@ -1,11 +1,11 @@
 """Tests for the GPT data loader."""
 
-from src.dataloaders.gpt_v1 import GPTDataLoaderV1
+from src.dataloaders.dataloader_v1 import DataLoaderV1
 
 
-def test_gpt_dataloader_returns_batched_input_target_pairs() -> None:
+def test_dataloader_returns_batched_input_target_pairs() -> None:
     """Group dataset examples into equally shaped input-target batches."""
-    dataloader = GPTDataLoaderV1(
+    dataloader = DataLoaderV1(
         "hello world, hello world!",
         batch_size=2,
         max_length=3,
@@ -28,9 +28,9 @@ def test_gpt_dataloader_returns_batched_input_target_pairs() -> None:
     ]
 
 
-def test_gpt_dataloader_keeps_incomplete_batch_when_requested() -> None:
+def test_dataloader_keeps_incomplete_batch_when_requested() -> None:
     """Keep the final short batch when ``drop_last`` is disabled."""
-    dataloader = GPTDataLoaderV1(
+    dataloader = DataLoaderV1(
         "hello world, hello world!",
         batch_size=2,
         max_length=3,

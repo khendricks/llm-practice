@@ -1,6 +1,6 @@
 """Tests for the GPT next-token dataset."""
 
-from src.datasets.gpt_v1 import GPTDatasetV1
+from src.datasets.dataset_v1 import DatasetV1
 from src.tokenizers.byte_pair_v1 import BytePairTokenizerV1
 
 
@@ -18,7 +18,7 @@ class StubTokenizer:
 def test_create_dataset() -> None:
     """Create input-target pairs shifted by one token."""
     tokenizer = BytePairTokenizerV1()
-    dataset = GPTDatasetV1(
+    dataset = DatasetV1(
         "hello world, hello world!",
         tokenizer,
         max_length=4,
@@ -33,7 +33,7 @@ def test_create_dataset() -> None:
 def test_create_dataset_uses_stride_for_overlapping_sequences() -> None:
     """Start each sequence at the configured stride interval."""
     tokenizer = StubTokenizer([0, 1, 2, 3, 4, 5])
-    dataset = GPTDatasetV1(
+    dataset = DatasetV1(
         "ignored",
         tokenizer,
         max_length=3,
@@ -50,7 +50,7 @@ def test_create_dataset_uses_stride_for_overlapping_sequences() -> None:
 def test_create_dataset_returns_no_examples_when_text_is_too_short() -> None:
     """Require enough tokens for an input and a shifted target."""
     tokenizer = StubTokenizer([0, 1, 2, 3])
-    dataset = GPTDatasetV1(
+    dataset = DatasetV1(
         "ignored",
         tokenizer,
         max_length=4,
