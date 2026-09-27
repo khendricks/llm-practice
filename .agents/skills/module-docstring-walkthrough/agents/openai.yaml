@@ -1,0 +1,3 @@
+interface:
+  display_name: "Module Docstring Walkthrough"
+  short_description: "Add concise code walkthroughs with optional ASCII flows"

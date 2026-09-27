@@ -1,41 +1,41 @@
-"""Calculate simple self-attention from input embedding vectors.
+"""Calculate self-attention directly from input embedding vectors.
 
-Input embeddings represent each token as a group of numbers. Self-attention
-lets each token compare its embedding with every token embedding in the same
-sequence, including itself. A larger comparison score means two embeddings
-are more similar according to their dot product.
+The module accepts embeddings shaped ``(sequence_length, embedding_dim)``
+or ``(batch_size, sequence_length, embedding_dim)``. It returns three values:
+the pairwise attention scores, their normalized attention weights, and one
+context vector per input token. Unlike learned self-attention, the input
+vectors serve directly as the queries, keys, and values.
 
-For one sequence, the input shape is ``(sequence_length, embedding_dim)``.
-For example, two tokens with three-value embeddings have this shape:
+Walkthrough:
+    For this illustrative two-token sequence, each vector is orthogonal to
+    the other, so each token's self-comparison is its largest score.
 
-    inputs: [[1.0, 2.0, 3.0],
-             [4.0, 5.0, 6.0]]
+        inputs
+        [ 1.0, 0.0 ]
+        [ 0.0, 1.0 ]
 
-Comparing every token with every other token creates an attention-score
-matrix with shape ``(sequence_length, sequence_length)``. Applying softmax
-turns each row into attention weights that add up to one. Those weights are
-then used to combine the input embeddings into one context vector per token.
+    1. ``inputs @ inputs.mT`` compares every token vector with every other
+       vector. Transposing only the final two dimensions preserves a leading
+       batch dimension when one is present.
 
-For example, two simple embeddings produce these approximate outputs:
+        attention_scores
+        [ 1.0, 0.0 ]
+        [ 0.0, 1.0 ]
 
-    inputs:          [[1.0, 0.0],
-                      [0.0, 1.0]]
+    2. Softmax over the final dimension changes each score row into weights
+       that sum to one. Each row belongs to a token and distributes attention
+       across all tokens in its sequence.
 
-    attention scores: [[1.0, 0.0],
-                       [0.0, 1.0]]
+        attention_weights
+        [ 0.731, 0.269 ]
+        [ 0.269, 0.731 ]
 
-    attention weights: [[0.731, 0.269],
-                        [0.269, 0.731]]
+    3. Matrix multiplication uses each weight row to combine the original
+       embeddings, producing a context vector for every token.
 
-    context vectors: [[0.731, 0.269],
-                      [0.269, 0.731]]
-
-Each token gives the largest weight to itself because its embedding has the
-highest dot-product score with itself.
-
-Later, ``InputEmbeddingV1`` will provide batches with shape
-``(batch_size, sequence_length, embedding_dim)``. This implementation works
-with both shapes by transposing only the final two dimensions.
+        all_context_vectors = attention_weights @ inputs
+        [ 0.731, 0.269 ]
+        [ 0.269, 0.731 ]
 """
 
 import torch
