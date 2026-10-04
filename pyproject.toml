@@ -6,6 +6,7 @@ dependencies = [
     "numpy>=2.5.3",
     "tiktoken>=0.14.0",
     "torch>=2.14.0",
+    "transformers[torch]",
 ]
 
 [dependency-groups]
