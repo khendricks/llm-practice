@@ -21,6 +21,9 @@ text -> tokenizer -> token IDs -> DatasetV1 -> DataLoaderV1
 - **Tokenization experiments** (`src/tokenizers/`) include character- and
   word-level tokenizers plus `BytePairTokenizerV1`, a wrapper around
   `tiktoken`'s pretrained GPT-2 byte-pair encoding.
+- **Hugging Face transformer experiments** (`src/transformers/`) use a
+  pretrained SmolLM2 chat model. The integration test downloads model weights
+  on its first run and reuses the Hugging Face cache afterward.
 - **Next-token training data** (`src/datasets/dataset_v1.py`) creates
   overlapping input and target sequences, where each target sequence is
   shifted ahead by one token.
